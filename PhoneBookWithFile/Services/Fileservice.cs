@@ -16,9 +16,9 @@ namespace PhoneBookWithFile.Services
         }
         public void AddName()
         {
-            Console.WriteLine("Enter name");
+            loggingService.Log("Enter name");
             string name = Console.ReadLine();
-            Console.WriteLine("Enter phone number");
+            loggingService.Log("Enter phone number");
             string phoneNumber = Console.ReadLine();
             int lastId = GetLastId(filePath);
             int newId = lastId + 1;
@@ -30,21 +30,21 @@ namespace PhoneBookWithFile.Services
             foreach (string phoneNumber in phoneNumers)
             {
                 string[] strings = phoneNumber.Split("/");
-                Console.WriteLine($"Name : {strings[0]} Number : {strings[1]}");
+                loggingService.Log($"Name : {strings[0]} Number : {strings[1]}");
             }
         }
         public void UpdatePhoneNumber()
         {
             ReadPhoneNumber();
-            Console.WriteLine("Qaysi Id kontaktni o'zgartirmoqchisiz");
+            loggingService.Log("Qaysi Id kontaktni o'zgartirmoqchisiz");
             string userInput = Console.ReadLine();
             int userID = int.Parse(userInput);
 
             if (CheckId(filePath, userID))
             {
-                Console.WriteLine("Enter name");
+                loggingService.Log("Enter name");
                 string name = Console.ReadLine();
-                Console.WriteLine("Enter phone number");
+                loggingService.Log("Enter phone number");
                 string phoneNumber = Console.ReadLine();
 
                 try
@@ -52,16 +52,16 @@ namespace PhoneBookWithFile.Services
                     bool updated = UpdateById(filePath, userID, name, phoneNumber);
                     if (updated)
                     {
-                        Console.WriteLine("Updated");
+                        loggingService.Log("Updated");
                     }
                     else
                     {
-                        Console.WriteLine("Id not found");
+                        loggingService.Log("Id not found");
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    loggingService.Log(ex.Message);
                 }
             }
         }
@@ -97,7 +97,7 @@ namespace PhoneBookWithFile.Services
         public void DeleteContact()
         {
             ReadPhoneNumber();
-            Console.WriteLine("Qaysi Id kontaktni o'chirmoqchisiz");
+            loggingService.Log("Qaysi Id kontaktni o'chirmoqchisiz");
             string userInput = Console.ReadLine();
             int userID = int.Parse(userInput);
 
@@ -108,16 +108,16 @@ namespace PhoneBookWithFile.Services
                     bool deleted = DeleteById(filePath, userID);
                     if (deleted)
                     {
-                        Console.WriteLine("Deleted");
+                        loggingService.Log("Deleted");
                     }
                     else
                     {
-                        Console.WriteLine("Not Deleted");
+                        loggingService.Log("Not Deleted");
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    loggingService.Log(ex.Message);
                 }
             }
         }
@@ -202,6 +202,10 @@ namespace PhoneBookWithFile.Services
             {
                 File.Create(filePath).Close();
             }
+        }
+
+        public void Log(string message)
+        {            
         }
     }
 }

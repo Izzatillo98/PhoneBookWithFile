@@ -2,6 +2,7 @@
 {
     internal interface ILoggingService
     {
+        void Log(string message);
     }
 }
 

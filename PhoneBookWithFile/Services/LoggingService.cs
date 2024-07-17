@@ -1,9 +1,12 @@
-﻿namespace PhoneBookWithFile.Services
+﻿using System;
+
+namespace PhoneBookWithFile.Services
 {
     internal class LoggingService : ILoggingService
     {
-        public LoggingService()
+        public void Log(string message)
         {
+            Console.WriteLine(message);
         }
     }
 }
