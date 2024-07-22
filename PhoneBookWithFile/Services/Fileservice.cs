@@ -84,7 +84,7 @@ namespace PhoneBookWithFile.Services
                             break;
                         }
                     }
-                }
+                } 
                 if (updated)
                 {
                     File.WriteAllLines(filePath, lines);
