@@ -2,7 +2,11 @@
 {
     internal interface IFileService
     {
-        void Log(string message);
-
+        void AddName();
+        void ReadPhoneNumber();
+        void UpdatePhoneNumber();
+        void DeleteContact();
+        string AddContact(string name, string phoneNumber);
+        void ReadContact();
     }
 }

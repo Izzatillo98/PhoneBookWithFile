@@ -4,15 +4,24 @@ namespace PhoneBookWithFile.Services
 {
     internal class UserInterfaceService
     {
+        private LoggingService log;
+        public UserInterfaceService()
+        {
+            this.log = new LoggingService();
+        }
+
         public void UserInterface()
+
         {
             FileService fileService = new FileService();
-            try
+            bool isTrue = false;
+            do
             {
-                bool isTrue = false;
-                do
+                try
                 {
-                    Console.WriteLine("1 => Create Contact\n2 => Read Contact\n3 => Update Contact\n4 => Delete Contact");
+                    log.LogInfo("Hello.Please select an internship");
+                    log.LogInfo("1 => Create Contact\n2 => Read Contact\n3 => Update Contact\n4 => Delete Contact");
+                    log.LogInfo("Your choise => ");
                     string userInput = Console.ReadLine();
                     int inputUser = Convert.ToInt32(userInput);
                     switch (inputUser)
@@ -34,12 +43,12 @@ namespace PhoneBookWithFile.Services
                             break;
                     }
                 }
-                while (IsTrue(isTrue));
+                catch (Exception ex)
+                {
+                    log.LogError(ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            while (IsTrue(isTrue)) ;
         }
         private bool IsTrue(bool isTrue)
         {

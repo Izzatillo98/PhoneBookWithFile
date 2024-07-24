@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System;
 using System.IO;
 
 namespace PhoneBookWithFile.Services
@@ -7,89 +7,96 @@ namespace PhoneBookWithFile.Services
     internal class FileService : IFileService
     {
         private const string filePath = "../../../phoneBook.txt";
-        private ILoggingService loggingService;
+        private ILoggingService log;
         public FileService()
         {
-            this.loggingService = new LoggingService();
-
+            this.log = new LoggingService();
             EnsureFileExists();
         }
         public void AddName()
         {
-            loggingService.Log("Enter name");
+            log.LogInfo("Enter name");
             string name = Console.ReadLine();
-            loggingService.Log("Enter phone number");
+            log.LogInfo("Enter phone number");
             string phoneNumber = Console.ReadLine();
             int lastId = GetLastId(filePath);
             int newId = lastId + 1;
             File.AppendAllText(filePath, newId + "." + name + "/" + phoneNumber + Environment.NewLine);
         }
+
         public void ReadPhoneNumber()
         {
             string[] phoneNumers = File.ReadAllLines(filePath);
             foreach (string phoneNumber in phoneNumers)
             {
                 string[] strings = phoneNumber.Split("/");
-                loggingService.Log($"Name : {strings[0]} Number : {strings[1]}");
+                log.LogInfo($"Name : {strings[0]} Number : {strings[1]}");
             }
         }
         public void UpdatePhoneNumber()
         {
-            ReadPhoneNumber();
-            loggingService.Log("Qaysi Id kontaktni o'zgartirmoqchisiz");
-            string userInput = Console.ReadLine();
-            int userID = int.Parse(userInput);
-
-            if (CheckId(filePath, userID))
+            try
             {
-                loggingService.Log("Enter name");
-                string name = Console.ReadLine();
-                loggingService.Log("Enter phone number");
-                string phoneNumber = Console.ReadLine();
+                ReadPhoneNumber();
+                log.LogInfo("Qaysi Id kontaktni o'zgartirmoqchisiz");
+                string userInput = Console.ReadLine();
+                int userID = int.Parse(userInput);
 
-                try
+                if (CheckId(filePath, userID))
                 {
+                    log.LogInfo("Enter name");
+                    string name = Console.ReadLine();
+                    log.LogInfo("Enter phone number");
+                    string phoneNumber = Console.ReadLine();
+
                     bool updated = UpdateById(filePath, userID, name, phoneNumber);
                     if (updated)
                     {
-                        loggingService.Log("Updated");
+                        log.LogInfo("Updated");
                     }
                     else
                     {
-                        loggingService.Log("Id not found");
+                        log.LogInfo("Id not found");
                     }
                 }
-                catch (Exception ex)
-                {
-                    loggingService.Log(ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
             }
         }
         private bool UpdateById(string filePath, int userID, string? name, string? phoneNumber)
         {
-            if (File.Exists(filePath))
+            try
             {
-                string[] lines = File.ReadAllLines(filePath);
-                bool updated = false;
-
-                for (int i = 0; i < lines.Length; i++)
+                if (File.Exists(filePath))
                 {
-                    string[] parts = lines[i].Split(".");
-                    if (parts.Length > 0 && int.TryParse(parts[0], out int id))
+                    string[] lines = File.ReadAllLines(filePath);
+                    bool updated = false;
+
+                    for (int i = 0; i < lines.Length; i++)
                     {
-                        if (id == userID)
+                        string[] parts = lines[i].Split(".");
+                        if (parts.Length > 0 && int.TryParse(parts[0], out int id))
                         {
-                            lines[i] = userID + "." + name + "/" + phoneNumber;
-                            updated = true;
-                            break;
+                            if (id == userID)
+                            {
+                                lines[i] = userID + "." + name + "/" + phoneNumber;
+                                updated = true;
+                                break;
+                            }
                         }
                     }
-                } 
-                if (updated)
-                {
-                    File.WriteAllLines(filePath, lines);
+                    if (updated)
+                    {
+                        File.WriteAllLines(filePath, lines);
+                    }
+                    return updated;
                 }
-                return updated;
+            }
+            catch (Exception ex)
+            {
+                log.LogError(ex.Message);
             }
             return false;
         }
@@ -97,7 +104,7 @@ namespace PhoneBookWithFile.Services
         public void DeleteContact()
         {
             ReadPhoneNumber();
-            loggingService.Log("Qaysi Id kontaktni o'chirmoqchisiz");
+            log.LogInfo("Qaysi Id kontaktni o'chirmoqchisiz");
             string userInput = Console.ReadLine();
             int userID = int.Parse(userInput);
 
@@ -108,16 +115,16 @@ namespace PhoneBookWithFile.Services
                     bool deleted = DeleteById(filePath, userID);
                     if (deleted)
                     {
-                        loggingService.Log("Deleted");
+                        log.LogInfo("Deleted");
                     }
                     else
                     {
-                        loggingService.Log("Not Deleted");
+                        log.LogInfo("Not Deleted");
                     }
                 }
                 catch (Exception ex)
                 {
-                    loggingService.Log(ex.Message);
+                    log.LogError(ex.Message);
                 }
             }
         }
@@ -128,7 +135,7 @@ namespace PhoneBookWithFile.Services
             {
                 string[] lines = File.ReadAllLines(filePath);
                 bool found = false;
-                var updatedLines = new List<string>();
+                List<string> updatedLines = new List<string>();
                 foreach (string line in lines)
                 {
                     string[] parts = line.Split(".");
@@ -170,7 +177,6 @@ namespace PhoneBookWithFile.Services
             }
             return false;
         }
-
         static int GetLastId(string filePath)
         {
             int lastID = 0;
@@ -193,7 +199,6 @@ namespace PhoneBookWithFile.Services
             }
             return lastID;
         }
-
         private static void EnsureFileExists()
         {
             bool isFilePresent = File.Exists(filePath);
@@ -204,8 +209,34 @@ namespace PhoneBookWithFile.Services
             }
         }
 
-        public void Log(string message)
-        {            
+        public string AddContact(string name, string phoneNumber)
+        {
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                log.LogError("Ism yoki telefon raqam xato kiritildi.To'g'ri qiymatlar kiriting");
+
+                return "";
+            }
+            else
+            {
+                string formattedContact = $"{name},{phoneNumber}";
+                File.AppendAllText(filePath, formattedContact);
+
+                return formattedContact;
+            }
+        }
+
+        public void ReadContact()
+        {
+            string[] lines = File.ReadAllLines(filePath);
+            foreach (string line in lines)
+            {
+                string[] res = line.Split("/");
+                if (res.Length > 0)
+                {
+                    log.LogInfo($"Name {res[0]} phone number {res[1]}");
+                }
+            }
         }
     }
 }
