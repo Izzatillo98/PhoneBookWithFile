@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 using System.IO;
+using PhoneBookWithFile.Models;
 
 namespace PhoneBookWithFile.Services
 {
@@ -237,6 +238,11 @@ namespace PhoneBookWithFile.Services
                     log.LogInfo($"Name {res[0]} phone number {res[1]}");
                 }
             }
+        }
+
+        public string AddContact(Contact contact)
+        {
+            throw new NotImplementedException();
         }
     }
 }

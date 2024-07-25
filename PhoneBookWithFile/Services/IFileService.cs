@@ -1,12 +1,14 @@
-﻿namespace PhoneBookWithFile.Services
+﻿using PhoneBookWithFile.Models;
+
+namespace PhoneBookWithFile.Services
 {
     internal interface IFileService
     {
         void AddName();
-        void ReadPhoneNumber();
+       void ReadPhoneNumber();
         void UpdatePhoneNumber();
         void DeleteContact();
-        string AddContact(string name, string phoneNumber);
+       string AddContact(Contact contact);
         void ReadContact();
     }
 }

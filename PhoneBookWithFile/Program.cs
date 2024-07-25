@@ -1,4 +1,5 @@
-﻿using PhoneBookWithFile.Services;
+﻿using PhoneBookWithFile.Models;
+using PhoneBookWithFile.Services;
 
 namespace PhoneBookWithFile
 {
@@ -6,8 +7,11 @@ namespace PhoneBookWithFile
     {
         static void Main(string[] args)
         { 
-            UserInterfaceService userInterfaceService = new UserInterfaceService();
-            userInterfaceService.UserInterface();
+           FileServiceV2 service = new FileServiceV2();
+            Contact contact = new Contact();
+            contact.Name = "Test";
+            contact.Phone = "1234567890";
+            service.AddContact(contact);
         }
     }
 }
