@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PhoneBookWithFile.Services
 {
-    internal interface IFileServiceV2 
+    public interface IFileServiceV2 
     {
 
         Task<Contact> AddContactAsync(Contact contact);

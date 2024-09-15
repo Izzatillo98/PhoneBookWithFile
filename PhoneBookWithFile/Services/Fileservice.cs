@@ -5,7 +5,7 @@ using PhoneBookWithFile.Models;
 
 namespace PhoneBookWithFile.Services
 {
-    internal class FileService : IFileService
+    public class FileService : IFileService
     {
         private const string filePath = "../../../phoneBook.txt";
         private ILoggingService log;
