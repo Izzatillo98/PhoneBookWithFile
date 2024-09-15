@@ -5,10 +5,10 @@ namespace PhoneBookWithFile.Services
     internal interface IFileService
     {
         void AddName();
-       void ReadPhoneNumber();
+        void ReadPhoneNumber();
         void UpdatePhoneNumber();
         void DeleteContact();
-       string AddContact(Contact contact);
+        string AddContact(Contact contact);
         void ReadContact();
     }
 }

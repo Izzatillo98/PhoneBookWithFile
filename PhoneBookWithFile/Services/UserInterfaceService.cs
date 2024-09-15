@@ -31,7 +31,7 @@ namespace PhoneBookWithFile.Services
                             break;
                         case 2:
                             fileService.ReadPhoneNumber();
-                            break;
+                            break; 
                         case 3:
                             fileService.UpdatePhoneNumber();
                             break;
