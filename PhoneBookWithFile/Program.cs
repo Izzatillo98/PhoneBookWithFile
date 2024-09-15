@@ -10,7 +10,7 @@ namespace PhoneBookWithFile
         
         static async Task Main(string[] args)
         { 
-          FileServiceV2 fileServiceV2 = new FileServiceV2();
+          IFileServiceV2 fileServiceV2 = new FileServiceV2();
 
             Contact contact = new Contact();
             contact.Name = "Tillo";
